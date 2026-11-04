@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Đại lý chuyên ngành Hoa Sen Home</title>
+<title>Mô hình Đại lý chuyên ngành Hoa Sen Home</title>
 <meta name="description" content="Ba mô hình cửa hàng mẫu Đại lý chuyên ngành Hoa Sen Home: Thiết bị Nhà Tắm – Nhà Bếp, Ốp lát, Điện nước. Phối cảnh 3D, mặt bằng, dự toán thi công nội thất và tour 3D-360.">
-<meta property="og:title" content="Đại lý chuyên ngành Hoa Sen Home">
+<meta property="og:title" content="Mô hình Đại lý chuyên ngành Hoa Sen Home">
 <meta property="og:description" content="Phối cảnh, mặt bằng, dự toán thi công nội thất và tour 3D-360 của 3 mô hình: Thiết bị Nhà Tắm – Nhà Bếp, Ốp lát, Điện nước.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23F5E52B'/%3E%3Cpath d='M50 20 82 48h-9v32H27V48h-9z' fill='%23A6241C'/%3E%3Crect x='43' y='58' width='14' height='22' fill='%23F5E52B'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -287,7 +287,7 @@ p { margin: 0; }
 
 /* ---------- Overlays (lightbox + estimate viewer) ---------- */
 .ov {
-  position: fixed; inset: 0; z-index: 50; background: rgb(11 14 19 / .96); color: #F2F4F7;
+  position: fixed; inset: 0; z-index: 50; background: var(--scrim); color: #F2F4F7;
   display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
@@ -306,21 +306,34 @@ p { margin: 0; }
 .ib:disabled { opacity: .35; cursor: default; }
 .ov :focus-visible { outline-color: var(--yellow); }
 
-.lb-stage { position: relative; min-height: 0; display: grid; place-items: center; overflow: hidden; touch-action: pan-y; }
-.lb-stage img { max-width: calc(100% - 24px); max-height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
-.lb-stage.zoomed { overflow: auto; place-items: start; touch-action: auto; }
-.lb-stage.zoomed img { max-width: none; max-height: none; width: 220%; cursor: zoom-out; }
-.lb-stage.is-plan img { background: #FFFFFF; border-radius: 6px; }
-.lb-nav { position: absolute; top: 50%; transform: translateY(-50%); }
-.lb-prev { left: 12px; }
-.lb-next { right: 12px; }
+.lb-stage { position: relative; min-height: 0; overflow: hidden; touch-action: pan-y; }
+.lb-stage img {
+  position: absolute; top: 8px; left: 84px; width: calc(100% - 168px); height: calc(100% - 20px);
+  object-fit: contain; user-select: none; -webkit-user-drag: none; cursor: zoom-in;
+  opacity: 0; transition: opacity .25s ease;
+}
+.lb-stage img.is-ready { opacity: 1; }
+.lb-stage.is-plan img { left: 16px; width: calc(100% - 32px); }
+.lb-stage.zoomed { overflow: auto; touch-action: auto; }
+.lb-stage.zoomed img { position: static; display: block; width: 220%; max-width: none; height: auto; cursor: zoom-out; }
+.lb-stage.zoomed .lb-nav { display: none; }
+.lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 52px; height: 52px; border-radius: 999px; background: rgb(255 255 255 / .1);
+}
+.lb-prev { left: 16px; }
+.lb-next { right: 16px; }
 .lb-strip {
-  display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px 12px; scrollbar-width: thin;
+  display: flex; gap: 8px; overflow-x: auto; padding: 6px 16px 16px;
+  scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / .25) transparent;
 }
+.lb-strip > :first-child { margin-left: auto; }
+.lb-strip > :last-child { margin-right: auto; }
 .lb-strip button {
-  flex: none; width: 84px; height: 60px; padding: 0; border: 2px solid transparent; border-radius: 6px;
-  overflow: hidden; background: #1C222A; cursor: pointer; opacity: .55;
+  flex: none; width: 80px; aspect-ratio: 4 / 3; padding: 0; border: 2px solid transparent; border-radius: 8px;
+  overflow: hidden; background: #1C222A; cursor: pointer; opacity: .5; transition: opacity .2s, border-color .2s;
 }
+.lb-strip button:hover { opacity: .85; }
 .lb-strip button img { width: 100%; height: 100%; object-fit: cover; }
 .lb-strip button[aria-current="true"] { border-color: var(--yellow); opacity: 1; }
 
@@ -348,7 +361,12 @@ p { margin: 0; }
   .plans { grid-template-columns: minmax(0, 1fr); }
   .model { padding-block: 40px 16px; }
   .lb-nav { display: none; }
-  .ov-bar { padding-left: 14px; }
+  .lb-stage img { left: 8px; width: calc(100% - 16px); }
+  .ov-bar { padding-left: 14px; gap: 6px; }
+  .ib-text span { display: none; }
+  .ib-text { width: 44px; padding: 0; }
+  .pv-zoom { min-width: 40px; }
+  .btn { padding-inline: 10px; gap: 7px; }
 }
 @media (max-width: 370px) {
   .btn small { display: none; }
@@ -378,10 +396,10 @@ p { margin: 0; }
   <div class="wrap">
     <a class="nav-mark" href="#top" aria-label="Hoa Sen Home, về đầu trang">HOA SEN H<svg class="hs-o" aria-hidden="true"><use href="#i-house"/></svg>ME</a>
     <ul class="nav-links">
-      <li><a href="#tbnb-tbnt">Nhà tắm – Nhà Bếp</a></li>
+      <li><a href="#tbnb-tbnt">Nhà tắm – Bếp</a></li>
       <li><a href="#op-lat">Ốp lát</a></li>
       <li><a href="#dien-nuoc">Điện nước</a></li>
-      <li><a class="is-360" href="#trai-nghiem-360">3D-360°</a></li>
+      <li><a class="is-360" href="#trai-nghiem-360">3D-360</a></li>
     </ul>
   </div>
 </nav>
@@ -395,12 +413,12 @@ p { margin: 0; }
     </div>
     <div class="hero-copy">
       <p class="eyebrow">Hồ sơ mô hình mẫu · Tháng 11/2026</p>
-      <h1>Đại lý chuyên ngành <em>Hoa Sen Home</em></h1>
+      <h1>Mô hình Đại lý chuyên ngành <em>Hoa Sen Home</em></h1>
       <p class="hero-lead">Ba mô hình cửa hàng mẫu cho đại lý chuyên ngành. Mỗi mô hình có phối cảnh 3D, mặt bằng bố trí, dự toán thi công nội thất theo 2 phương án và tour tham quan 3D-360.</p>
       <ul class="jump">
         <li><a href="#tbnb-tbnt">Thiết bị Nhà Tắm – Nhà Bếp <span>75 m²</span></a></li>
         <li><a href="#op-lat">Ốp lát <span>75 m²</span></a></li>
-        <li><a href="#dien-nuoc">Điện nước <span>75 m²</span></a></li>
+        <li><a href="#dien-nuoc">Điện nước <span>82,5 m²</span></a></li>
       </ul>
     </div>
   </div>
@@ -448,7 +466,7 @@ p { margin: 0; }
   <div class="wrap">
     <div class="model-head">
       <div class="model-title">
-        <p class="eyebrow">Đại lý chuyên ngành · TBNT– NB</p>
+        <p class="eyebrow">Đại lý chuyên ngành · TBNB – TBNT</p>
         <h2 id="tb-title">Thiết bị Nhà Tắm – Nhà Bếp</h2>
         <p class="lead">Showroom thiết bị vệ sinh và nhà bếp: hệ kệ cao áp tường, kệ đảo lavabo và bồn cầu, bục đá bồn tắm, 2 mô hình trải nghiệm, quầy lễ tân và vách logo đỏ, tiểu cảnh, trần và chiếu sáng trang trí.</p>
       </div>
@@ -631,7 +649,7 @@ p { margin: 0; }
       <aside class="card facts" aria-label="Thông số mô hình">
         <h3>Thông số mô hình</h3>
         <dl>
-          <dt>Diện tích</dt><dd class="num">75 m² <small>tên bản vẽ ghi 75 m²</small></dd>
+          <dt>Diện tích</dt><dd class="num">82,5 m² <small>tên bản vẽ ghi 75 m²</small></dd>
           <dt>Kích thước</dt><dd class="num">11,0 × 7,5 m</dd>
           <dt>Chiều cao trần</dt><dd class="num">3,5 m <small>giả định</small></dd>
           <dt>Hiện trạng nhận</dt><dd>Đã hoàn thiện cơ bản</dd>
@@ -714,11 +732,17 @@ p { margin: 0; }
     lbZoom.setAttribute('aria-label', on ? 'Thu nhỏ' : 'Phóng to');
     if (on) { lbStage.scrollTop = 0; lbStage.scrollLeft = 0; }
   }
+  function setSrc(url) {
+    lbImg.classList.remove('is-ready');
+    lbImg.onload = function () { lbImg.classList.add('is-ready'); };
+    lbImg.src = url;
+    if (lbImg.complete && lbImg.naturalWidth) lbImg.classList.add('is-ready');
+  }
   function showImage(i) {
     var m = MODELS[cur.g];
     cur.i = (i + m.count) % m.count;
     setZoom(false);
-    lbImg.src = img(cur.g, cur.i);
+    setSrc(img(cur.g, cur.i));
     lbImg.alt = 'Phối cảnh mô hình ' + m.name + ', ảnh ' + (cur.i + 1);
     lbCount.textContent = 'Ảnh ' + (cur.i + 1) + ' / ' + m.count;
     var btns = lbStrip.children;
@@ -755,12 +779,12 @@ p { margin: 0; }
     lbStage.classList.add('is-plan');
     lbPrev.hidden = lbNext.hidden = true; lbStrip.hidden = true;
     setZoom(false);
-    lbImg.src = 'assets/img/' + g + '/layout.webp';
+    setSrc('assets/img/' + g + '/layout.webp');
     lbImg.alt = 'Mặt bằng bố trí mô hình ' + m.name;
     lb.hidden = false; lock(true);
     document.getElementById('lb-close').focus();
   }
-  function closeLb() { lb.hidden = true; lbImg.removeAttribute('src'); lock(false); if (lastFocus) lastFocus.focus(); }
+  function closeLb() { lb.hidden = true; lbImg.classList.remove('is-ready'); lbImg.removeAttribute('src'); lock(false); if (lastFocus) lastFocus.focus(); }
 
   document.getElementById('lb-close').addEventListener('click', closeLb);
   lbPrev.addEventListener('click', function () { showImage(cur.i - 1); });
